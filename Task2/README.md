@@ -1,22 +1,15 @@
-# Simple Banking System
+# Task 2: Bank Transaction Summary
 
-This is a command-line banking system built in Python that allows multiple users to manage their finances. Each user can perform the following operations:
+This Python script collects user input for:
+- **Name** of the user
+- **Starting balance**
+- A list of **transactions** (amount and type: credit/debit)
 
-### Features
-- Add a new user
-- Add income (credit) transactions
-- Add expense (debit) transactions
-- View all transactions
-- Delete a transaction
-- View user balance
+It then:
+- Stores the data in **variables** and a **list of lists** for transactions.
+- **Prints a transaction summary**, showing each transaction and the final balance after all transactions.
+- **Calculates the final balance** based on the transactions (credit increases balance, debit decreases it).
 
-### Technologies Used
-- Python 3
-- In-memory storage using dictionaries and lists (no external database)
-
-### How to Run
-1. Make sure you have Python 3 installed.
-2. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/banking-system.git
-   cd banking-system
+### To Run:
+```bash
+python bank_transaction_summary.py
