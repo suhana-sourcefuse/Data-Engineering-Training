@@ -1,3 +1,12 @@
+import logging
+
+# Setup logging for errors and info
+logging.basicConfig(
+    filename="banking_app.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 # ---- Global Data ----
 users = {}
 
@@ -26,8 +35,10 @@ def add_transaction(name):
         transaction = {"amount": amount, "type": t_type, "desc": desc}
         users[name].append(transaction)
         print("Transaction added successfully!")
+        logging.info(f"Transaction added for {name}: {transaction}")
     except ValueError as ve:
         print(f"Error: {ve}")
+        logging.error(f"Transaction error for {name}: {ve}")
 
 # ---- Function to View Transactions ----
 def view_transactions(name):
@@ -53,10 +64,13 @@ def delete_transaction(name):
         if 0 <= index < len(users[name]):
             removed = users[name].pop(index)
             print(f"Deleted: {removed}")
+            logging.info(f"Transaction deleted for {name}: {removed}")
         else:
             print("Invalid transaction number.")
+            logging.warning(f"User {name} entered invalid transaction number {index+1} for deletion.")
     except ValueError:
         print("Please enter a valid number.")
+        logging.error(f"Invalid input for deleting transaction by user {name}")
 
 # ---- Function to View Balance ----
 def view_balance(name):
@@ -98,6 +112,7 @@ def user_menu(name):
             break
         else:
             print("Invalid option. Try again.")
+            logging.warning(f"User {name} selected invalid option in user menu: {choice}")
 
 # ---- Main Program Loop ----
 def main():
@@ -121,11 +136,13 @@ def main():
                 user_menu(name)
             else:
                 print("User not found. Please sign up first.")
+                logging.warning(f"Returning user attempted login but user not found: {name}")
         elif login_choice == "3":
             print("Goodbye!")
             break
         else:
             print("Invalid input. Please try again.")
+            logging.warning(f"Invalid input at main login menu: {login_choice}")
 
 # ---- Run the program ----
 if __name__ == "__main__":

@@ -21,4 +21,4 @@ This project is a continuation of the earlier banking application. It supports:
 1. Open terminal inside the `task4` folder.
 2. Run the program:
    ```bash
-   python banking.py
+   python3 Task4.py
