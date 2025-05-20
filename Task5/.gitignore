@@ -1,0 +1,17 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+venv/
+.env/
+
+# Ignore local logs and data
+*.log
+*.db
+*.sqlite
+output.csv
+
+# Ignore IDE and system files
+.vscode/
+.DS_Store
