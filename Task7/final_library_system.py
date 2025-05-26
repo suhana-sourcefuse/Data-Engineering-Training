@@ -51,11 +51,17 @@ class Library:
         self.books = []
         self.users = {}
 
-    def add_book(self, book):
+    def add_book(self, book, username):
+        if username != 'admin':
+            print("Only admin can add books.")
+            return
         self.books.append(book)
         print(f"Book '{book.title}' added to library.")
 
-    def remove_book(self, isbn):
+    def remove_book(self, isbn, username):
+        if username != 'admin':
+            print("Only admin can remove books.")
+            return
         for book in self.books:
             if book.isbn == isbn:
                 self.books.remove(book)
@@ -76,7 +82,10 @@ class Library:
         else:
             print("No matching books found.")
 
-    def display_all_books(self):
+    def display_all_books(self, username):
+        if username != 'admin':
+            print("Only admin can view all books.")
+            return
         if not self.books:
             print("No books available in the library.")
         else:
@@ -130,7 +139,10 @@ class Library:
 
         print("Book not found in user's checked-out list.")
 
-    def view_all_users(self):
+    def view_all_users(self, username):
+        if username != 'admin':
+            print("Only admin can view all users.")
+            return
         if not self.users:
             print("No users registered.")
         else:
@@ -138,7 +150,10 @@ class Library:
             for username in self.users:
                 print(f"- {username.title()}")
 
-    def generate_report(self):
+    def generate_report(self, username):
+        if username != 'admin':
+            print("Only admin can generate report.")
+            return
         total_books = len(self.books)
         total_users = len(self.users)
         checked_out_total = sum(len(user.checked_out_books) for user in self.users.values())
@@ -148,76 +163,99 @@ class Library:
         print(f"Total registered users: {total_users}")
         print(f"Total books checked out: {checked_out_total}")
 
-if __name__ == "__main__":
+
+# ---- Main Menu System ----
+def main():
     library = Library()
 
     while True:
-        print("\n--- Library Menu ---")
-        print("1. Add Printed Book")
-        print("2. Add EBook")
-        print("3. Register User")
-        print("4. Checkout Book")
-        print("5. Return Book")
-        print("6. View All Books")
-        print("7. View User's Books")
-        print("8. Search Book")
-        print("9. View All Users")
-        print("10. Generate Report")
-        print("0. Exit")
+        print("\nWelcome to the Library System")
+        print("1. Login")
+        print("2. Register")
+        print("3. Exit")
+        choice = input("Enter choice: ")
 
-        choice = input("Enter your choice: ").strip()
+        if choice == '1':
+            username = input("Enter username: ").strip().lower()
+            if username not in library.users:
+                print("User not found. Please register first.")
+                continue
 
-        if choice == "1":
-            title = input("Title: ")
-            author = input("Author: ")
-            isbn = input("ISBN: ")
-            pages = int(input("Number of pages: "))
-            book = PrintedBook(title, author, isbn, pages)
-            library.add_book(book)
+            print(f"\nWelcome, {username.title()}!")
+            while True:
+                if username == 'admin':
+                    print("\nAdmin Menu:")
+                    print("1. Add Printed Book")
+                    print("2. Add EBook")
+                    print("3. Remove Book")
+                    print("4. Display All Books")
+                    print("5. View All Users")
+                    print("6. Generate Report")
+                    print("7. Logout")
+                    admin_choice = input("Enter choice: ")
 
-        elif choice == "2":
-            title = input("Title: ")
-            author = input("Author: ")
-            isbn = input("ISBN: ")
-            size = float(input("File size (MB): "))
-            format = input("File format (e.g., pdf, epub): ")
-            book = EBook(title, author, isbn, size, format)
-            library.add_book(book)
+                    if admin_choice == '1':
+                        title = input("Title: ")
+                        author = input("Author: ")
+                        isbn = input("ISBN: ")
+                        pages = int(input("Number of Pages: "))
+                        book = PrintedBook(title, author, isbn, pages)
+                        library.add_book(book, username)
+                    elif admin_choice == '2':
+                        title = input("Title: ")
+                        author = input("Author: ")
+                        isbn = input("ISBN: ")
+                        size = float(input("File Size (MB): "))
+                        fmt = input("File Format: ")
+                        book = EBook(title, author, isbn, size, fmt)
+                        library.add_book(book, username)
+                    elif admin_choice == '3':
+                        isbn = input("Enter ISBN to remove: ")
+                        library.remove_book(isbn, username)
+                    elif admin_choice == '4':
+                        library.display_all_books(username)
+                    elif admin_choice == '5':
+                        library.view_all_users(username)
+                    elif admin_choice == '6':
+                        library.generate_report(username)
+                    elif admin_choice == '7':
+                        break
+                    else:
+                        print("Invalid choice.")
+                else:
+                    print("\nUser Menu:")
+                    print("1. View My Books")
+                    print("2. Search Books")
+                    print("3. Checkout Book")
+                    print("4. Return Book")
+                    print("5. Logout")
+                    user_choice = input("Enter choice: ")
 
-        elif choice == "3":
-            username = input("Enter username: ")
+                    if user_choice == '1':
+                        library.view_user_books(username)
+                    elif user_choice == '2':
+                        keyword = input("Enter keyword to search: ")
+                        library.search_books(keyword)
+                    elif user_choice == '3':
+                        isbn = input("Enter ISBN to checkout: ")
+                        library.checkout_book(username, isbn)
+                    elif user_choice == '4':
+                        isbn = input("Enter ISBN to return: ")
+                        library.return_book(username, isbn)
+                    elif user_choice == '5':
+                        break
+                    else:
+                        print("Invalid choice.")
+
+        elif choice == '2':
+            username = input("Enter new username: ").strip().lower()
             library.register_user(username)
-
-        elif choice == "4":
-            username = input("Enter username: ")
-            isbn = input("Enter ISBN of the book to checkout: ")
-            library.checkout_book(username, isbn)
-
-        elif choice == "5":
-            username = input("Enter username: ")
-            isbn = input("Enter ISBN of the book to return: ")
-            library.return_book(username, isbn)
-
-        elif choice == "6":
-            library.display_all_books()
-
-        elif choice == "7":
-            username = input("Enter username: ")
-            library.view_user_books(username)
-
-        elif choice == "8":
-            keyword = input("Enter keyword to search: ")
-            library.search_books(keyword)
-
-        elif choice == "9":
-            library.view_all_users()
-
-        elif choice == "10":
-            library.generate_report()
-
-        elif choice == "0":
-            print("Exiting the system. Goodbye!")
+        elif choice == '3':
+            print("Goodbye!")
             break
-
         else:
-            print("Invalid choice. Please try again.")
+            print("Invalid choice.")
+
+
+if __name__ == "__main__":
+    main()
