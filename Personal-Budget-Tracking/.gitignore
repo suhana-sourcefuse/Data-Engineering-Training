@@ -1,0 +1,17 @@
+# Byte-compiled / virtual environment
+__pycache__/
+*.py[cod]
+*.pyc
+venv/
+.env
+
+# Logs
+*.log
+budget_log.txt
+
+# Data
+transactions.csv
+
+# OS files
+.DS_Store
+Thumbs.db
