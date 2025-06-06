@@ -27,9 +27,7 @@ A lightweight, terminal-based budget tracking application built with Python. Use
 ## ▶️ How to Run
 - Make sure you have Python 3 installed.
 - Install the required package:
-  '''bash
   pip install pandas
 
 - Run the program:
-  '''bas
   python3 budget.py
